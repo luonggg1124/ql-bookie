@@ -162,7 +162,7 @@ export default function PartnerPage() {
           value={typeFilter}
           onValueChange={(v) => setTypeFilter(v as PartnerType | "all")}
         >
-          <SelectTrigger className="w-full sm:w-[180px]">
+          <SelectTrigger className="w-full sm:w-45">
             <SelectValue placeholder="Loại đối tác" />
           </SelectTrigger>
           <SelectContent>
@@ -184,13 +184,13 @@ export default function PartnerPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="min-w-[220px]">Tên</TableHead>
-                <TableHead className="w-[120px]">Loại</TableHead>
-                <TableHead className="min-w-[200px]">Địa chỉ</TableHead>
-                <TableHead className="w-[130px]">Điện thoại</TableHead>
-                <TableHead className="min-w-[180px]">Email</TableHead>
-                <TableHead className="w-[100px]">Trạng thái</TableHead>
-                <TableHead className="w-[70px] text-right">Thao tác</TableHead>
+                <TableHead className="min-w-55">Tên</TableHead>
+                <TableHead className="w-30">Loại</TableHead>
+                <TableHead className="min-w-50">Địa chỉ</TableHead>
+                <TableHead className="w-32.5">Điện thoại</TableHead>
+                <TableHead className="min-w-45">Email</TableHead>
+                <TableHead className="w-25">Trạng thái</TableHead>
+                <TableHead className="w-17.5 text-right">Thao tác</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -240,7 +240,7 @@ export default function PartnerPage() {
                         {PARTNER_TYPE_LABEL[partner.type]}
                       </Badge>
                     </TableCell>
-                    <TableCell className="whitespace-normal align-top max-w-[280px]">
+                    <TableCell className="whitespace-normal align-top max-w-70">
                       <div className="flex items-start gap-1.5 text-muted-foreground">
                         <MapPin className="size-3.5 shrink-0 mt-0.5" />
                         <span className="min-w-0 wrap-break-word">
