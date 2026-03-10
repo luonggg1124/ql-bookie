@@ -8,12 +8,22 @@ import { Eye, EyeOff, Lock, User, Globe } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useAuth } from "@/data/@client/auth";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   domain: z.string().min(1, "Vui lòng nhập domain"),
-  account: z.string().min(1, "Vui lòng nhập tài khoản"),
+  username: z.string().min(1, "Vui lòng nhập tài khoản"),
   password: z.string().min(1, "Vui lòng nhập mật khẩu"),
 });
 
@@ -21,21 +31,30 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
+  const { login } = useAuth();
+  const route = useRouter();
+
+  const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      domain: "",
+      username: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      // TODO: Implement login logic here
-      console.log("Login data:", data);
-      // Example: await login(data);
-    } catch (error) {
-      console.error("Login error:", error);
+      await login({
+        username: data.username,
+        password: data.password,
+        rememberMe: true,
+        domain: data.domain,
+      });
+      toast.success("Đăng nhập thành công!");
+      route.push("/dashboard");
+    } catch {
+      console.error("Đăng nhập thất bại:");
     }
   };
 
@@ -48,85 +67,99 @@ export default function LoginForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Domain Field */}
-          <div className="space-y-2">
-            <Label htmlFor="domain">Domain</Label>
-            <div className="relative">
-              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <Input
-                id="domain"
-                type="text"
-                placeholder="Nhập domain"
-                className="pl-9"
-                {...register("domain")}
-                aria-invalid={errors.domain ? "true" : "false"}
-              />
-            </div>
-            {errors.domain && (
-              <p className="text-sm text-destructive">{errors.domain.message}</p>
-            )}
-          </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {/* Domain Field */}
+            <FormField
+              control={form.control}
+              name="domain"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Domain</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Globe className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                      <Input
+                        type="text"
+                        placeholder="Nhập domain"
+                        className="pl-9"
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Account Field */}
-          <div className="space-y-2">
-            <Label htmlFor="account">Tài khoản</Label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <Input
-                id="account"
-                type="text"
-                placeholder="Nhập tài khoản"
-                className="pl-9"
-                {...register("account")}
-                aria-invalid={errors.account ? "true" : "false"}
-              />
-            </div>
-            {errors.account && (
-              <p className="text-sm text-destructive">{errors.account.message}</p>
-            )}
-          </div>
+            {/* Username Field */}
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tài khoản</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                      <Input
+                        type="text"
+                        placeholder="Nhập tài khoản"
+                        className="pl-9"
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Password Field */}
-          <div className="space-y-2">
-            <Label htmlFor="password">Mật khẩu</Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Nhập mật khẩu"
-                className="pl-9 pr-9"
-                {...register("password")}
-                aria-invalid={errors.password ? "true" : "false"}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-              >
-                {showPassword ? (
-                  <EyeOff className="size-4" />
-                ) : (
-                  <Eye className="size-4" />
-                )}
-              </button>
-            </div>
-            {errors.password && (
-              <p className="text-sm text-destructive">{errors.password.message}</p>
-            )}
-          </div>
+            {/* Password Field */}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mật khẩu</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Nhập mật khẩu"
+                        className="pl-9 pr-9"
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="size-4" />
+                        ) : (
+                          <Eye className="size-4" />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
-          </Button>
-        </form>
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
+            </Button>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );

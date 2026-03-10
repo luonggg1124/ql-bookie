@@ -264,7 +264,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Donut chart */}
-      <Card className="lg:max-w-[420px]">
+      <Card className="lg:max-w-105">
         <CardHeader>
           <CardTitle>Phân bố trạng thái</CardTitle>
           <p className="text-muted-foreground text-sm">
