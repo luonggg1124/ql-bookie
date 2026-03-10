@@ -116,6 +116,5 @@ export const refreshUser = async (request:RefreshRequest) => {
     const message = error?.Message || "Lỗi khi lấy quyền của người dùng";
     throwExceptionByStatus(status, message);
   }
- 
   return transform(data?.Data);
 }
