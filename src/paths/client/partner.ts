@@ -8,7 +8,7 @@ const partnerPaths = {
         getPath: () => "/partner",
         display: {
             sidebar: true,
-            search: false,
+            search: true,
         },
     }),
     detail: defineRoute({
@@ -18,6 +18,15 @@ const partnerPaths = {
         display: {
             sidebar: false,
             search: false,
+        },
+    }),
+    create: defineRoute({
+        title: "Thêm đối tác",
+        path: "/partner/create",
+        getPath: () => "/partner/create",
+        display: {
+            sidebar: false,
+            search: true,
         },
     }),
 }

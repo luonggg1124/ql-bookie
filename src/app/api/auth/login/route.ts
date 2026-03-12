@@ -40,8 +40,6 @@ export async function POST(req: NextRequest) {
         accessToken: auth.accessToken.value,
       },
     });
-    console.log(permissions);
-
 
     const res = NextResponse.json({ user: auth.user, permissions }, { status: 201 });
 

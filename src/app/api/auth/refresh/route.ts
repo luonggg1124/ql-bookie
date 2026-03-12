@@ -16,7 +16,6 @@ export async function GET() {
 
             }
         });
-        console.log(data, "data refresh");
 
         const permissions = await getMyPermission({
             params: {
@@ -26,7 +25,6 @@ export async function GET() {
                 accessToken: data.accessToken.value,
             },
         });
-        console.log(permissions);
         
         const res = NextResponse.json({ user: data.user, permissions }, { status: 201 });
         return setAuthCookies(res, {

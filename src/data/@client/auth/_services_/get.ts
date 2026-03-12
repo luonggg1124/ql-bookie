@@ -11,7 +11,6 @@ export async function refresh() {
     });
 
     if (!response.ok) {
-      console.log(response,'res err refresh');
       return null;
     }
     

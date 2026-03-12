@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/* eslint-disable */
 
 // ApiRoute hỗ trợ mọi kiểu getPath đang dùng ở các file path api client
 

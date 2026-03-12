@@ -35,7 +35,6 @@ export default function LoginForm() {
   const route = useRouter();
 
   const form = useForm<LoginFormData>({
-    // @ts-expect-error zod resolver types mismatched with installed zod version
     resolver: zodResolver(loginSchema),
     defaultValues: {
       domain: "",

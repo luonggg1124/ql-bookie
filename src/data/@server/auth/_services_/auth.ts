@@ -94,7 +94,6 @@ export const getMyPermission = async (request: GetMyPermissionRequest) => {
     const message = error?.message || "Lỗi khi lấy quyền của người dùng";
     throwExceptionByStatus(status, message);
   }
-  console.log(data,'permission data');
   
   const raw = data?.data || "";
   if (!raw) return [];
